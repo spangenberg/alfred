@@ -1,3 +1,5 @@
+require 'rails'
+
 module Alfred
   autoload :Models, 'alfred/models'
 
@@ -12,5 +14,5 @@ module Alfred
   end
 end
 
-require 'alfred/engine' if defined?(Rails)
+require 'alfred/engine'
 require 'alfred/orm/active_record' if defined?(ActiveRecord)
