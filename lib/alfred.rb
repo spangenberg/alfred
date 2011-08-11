@@ -1,4 +1,6 @@
 module Alfred
+  autoload :Models, 'alfred/models'
+
   # Automaticly add password_confirmation if password exists.
   mattr_accessor :auto_password_confirmation
   @@auto_password_confirmation = true
@@ -11,3 +13,4 @@ module Alfred
 end
 
 require 'alfred/engine' if defined?(Rails)
+require 'alfred/orm/active_record' if defined?(ActiveRecord)
