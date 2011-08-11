@@ -1,0 +1,1 @@
+h1. Alfred "!https://secure.travis-ci.org/parcydo/alfred.png?branch=master!":http://travis-ci.org/parcydo/alfred
