@@ -1,1 +1,120 @@
-h1. Alfred "!https://secure.travis-ci.org/parcydo/alfred.png?branch=master!":http://travis-ci.org/parcydo/alfred
+h1. Alfred - the unobtrusive butler who takes care of the uninvited guests "!https://secure.travis-ci.org/parcydo/alfred.png?branch=master!":http://travis-ci.org/parcydo/alfred
+
+Travis is an attempt to create an open-source, distributed build system for the Ruby community that:
+
+1. allows open-source projects to register their repository and have their test-suites run on demand
+2. allows users to contribute build capacities by connecting a VM that runs a build agent somewhere on their underused servers
+
+h2. Contact
+* "Github":http://github.com/parcydo
+* "Twitter":http://twitter.com/parcydo
+
+h2. Documentation
+
+* "Wiki":http://github.com/parcydo/alfred/wiki
+* "YARD":http://rdoc.info/github/parcydo/alfred
+
+h2. Preview
+
+h3. Without Alfred, and with much mess:
+
+<pre>
+# app/models/user.rb
+class User < ActiveRecord::Base
+  attr_accessible :email, :password, :password_confirmation
+  attr_accessible :email, :password, :password_confirmation, :username, as: :admin
+  attr_accessible :email, :password, :password_confirmation, :username, as: :on_create
+end
+</pre>
+
+Have to use a special role:
+
+<pre>
+# app/controllers/users_controlelr.rb
+class UsersController < ApplicationController
+  def create
+    @user = User.create(params[:user], as: :on_create)
+  end
+end
+</pre>
+
+h3. With Alfred and no hassles:
+
+<pre>
+# app/models/user.rb
+class User < ActiveRecord::Base
+  alfred_accessible :email, :password
+  alfred_accessible :username, as: :admin
+  alfred_accessible :username, on: :create
+end
+</pre>
+
+Nothing special here:
+
+<pre>
+# app/controllers/users_controlelr.rb
+class UsersController < ApplicationController
+  def create
+    @user = User.create(params[:user])
+  end
+end
+</pre>
+
+h2. Usage
+
+alfred_accessible and alfred_protected behaves just like attr_accessible and attr_protected on steroids.
+
+h3. accessible and protected
+
+<pre>
+  class User < ActiveRecord::Base
+    alfred_accessible :a, :b
+    alfred_protected :c, :d
+  end
+</pre>
+
+h3. roles
+
+Custom inherits from default role:
+
+<pre>
+  class User < ActiveRecord::Base
+    alfred_accessible :a, :b
+    alfred_accessible :c, :d, as: :custom
+  end
+</pre>
+
+h3. custom inheritance
+
+<pre>
+  class User < ActiveRecord::Base
+    alfred_accessible :a, :b
+    alfred_accessible :c, :d, as: :custom
+    alfred_accessible :e, :f, as: :custom2, inherit: :custom
+  end
+</pre>
+
+h3. events
+
+<pre>
+  class User < ActiveRecord::Base
+    alfred_accessible :a, :b
+    alfred_accessible :c, :d, on: :create
+    alfred_accessible :e, :f, on: :update
+  end
+</pre>
+
+h3. passwords
+
+password_confirmation will automatically added by default.
+
+<pre>
+  class User < ActiveRecord::Base
+    alfred_accessible :password
+  end
+</pre>
+
+h2. Requirements
+
+* Ruby 1.9.2 (Ruby 1.9.1 is not supported).
+* Rails 3.1.x (Rails 3.0.x is not supported).
