@@ -13,7 +13,8 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "alfred"
 
-  s.add_dependency "rails", "~> 3.1.0.rc"
+  s.add_dependency "rails", ">= 3.1.0"
+  s.add_development_dependency "activemodel"
   s.add_development_dependency "activerecord"
   s.add_development_dependency "rr"
   s.add_development_dependency "rspec"
