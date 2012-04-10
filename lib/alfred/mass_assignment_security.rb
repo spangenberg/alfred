@@ -127,7 +127,7 @@ module Alfred
           end
 
           [nil, :create, :update].each do |action|
-            next if !options[:on] && options[:on] != action
+            next if options[:on] && options[:on] != action
 
             action_args = args.dup
             role = role(options[:as], action)
