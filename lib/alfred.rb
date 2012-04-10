@@ -5,6 +5,10 @@ module Alfred
   mattr_accessor :auto_password_confirmation
   @@auto_password_confirmation = true
 
+  # Automaticly override orm to support action based mass assignment security.
+  mattr_accessor :override_orm
+  @@override_orm = true
+
   # Default way to setup Alfred. Run rails generate alfred:install to create
   # a fresh initializer with all configuration values.
   def self.setup

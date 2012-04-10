@@ -27,6 +27,8 @@ module Alfred
   end
 end
 
-class ActiveRecord::Base
-  include Alfred::ActiveRecord::Base
+if Alfred.override_orm
+  class ActiveRecord::Base
+    include Alfred::ActiveRecord::Base
+  end
 end

@@ -2,11 +2,11 @@ require 'spec_helper'
 
 class AlfredModel
   include ActiveModel::MassAssignmentSecurity
-  extend Alfred::Models
+  extend Alfred::ActiveModel::MassAssignmentSecurity
   attr_accessor :a, :b, :c, :d, :e, :f
 end
 
-describe Alfred::Models do
+describe Alfred::ActiveModel::MassAssignmentSecurity::ClassMethods do
 
   describe "accessible" do
 
@@ -41,23 +41,18 @@ describe Alfred::Models do
         ADModel.accessible_attributes(:custom).should eq(ActiveModel::MassAssignmentSecurity::WhiteList.new([:a, :b, :c, :d].map(&:to_s)))
       end
 
-      it "add's attr_accessible to event" do
+      it "add's attr_accessible to action" do
         class AEModel < AlfredModel
           alfred_accessible :a, :b, on: :create
         end
-        AEModel.accessible_attributes.should eq(ActiveModel::MassAssignmentSecurity::WhiteList.new([].map(&:to_s)))
-        AEModel.before_create
-        AEModel.accessible_attributes.should eq(ActiveModel::MassAssignmentSecurity::WhiteList.new([:a, :b].map(&:to_s)))
+        AEModel.accessible_attributes(:default_create).should eq(ActiveModel::MassAssignmentSecurity::WhiteList.new([:a, :b].map(&:to_s)))
       end
 
       it "appends attr_accessible with custom role to event" do
         class AFModel < AlfredModel
           alfred_accessible :a, :b, as: :custom, on: :create
         end
-        AFModel.accessible_attributes.should eq(ActiveModel::MassAssignmentSecurity::WhiteList.new([].map(&:to_s)))
-        AFModel.before_create
-        AFModel.accessible_attributes.should eq(ActiveModel::MassAssignmentSecurity::WhiteList.new([].map(&:to_s)))
-        AFModel.accessible_attributes(:custom).should eq(ActiveModel::MassAssignmentSecurity::WhiteList.new([:a, :b].map(&:to_s)))
+        AFModel.accessible_attributes(:custom_create).should eq(ActiveModel::MassAssignmentSecurity::WhiteList.new([:a, :b].map(&:to_s)))
       end
     end
 
@@ -77,6 +72,7 @@ describe Alfred::Models do
         class AHModel < AlfredModel
           alfred_accessible :a, :b
           alfred_accessible :c, :d, as: :custom
+          alfred_accessible :e, :f, as: :custom2, inherit: :custom
           alfred_accessible :e, :f, as: :custom2, inherit: :custom
         end
         AHModel.accessible_attributes.should eq(ActiveModel::MassAssignmentSecurity::WhiteList.new([:a, :b].map(&:to_s)))
@@ -140,23 +136,18 @@ describe Alfred::Models do
          PDModel.protected_attributes(:custom).should eq(ActiveModel::MassAssignmentSecurity::BlackList.new([:a, :b, :c, :d].map(&:to_s)))
        end
 
-       it "add's attr_protected to event" do
+       it "add's attr_protected to action" do
          class PEModel < AlfredModel
            alfred_protected :a, :b, on: :create
          end
-         PEModel.protected_attributes.should eq(ActiveModel::MassAssignmentSecurity::BlackList.new([].map(&:to_s)))
-         PEModel.before_create
-         PEModel.protected_attributes.should eq(ActiveModel::MassAssignmentSecurity::BlackList.new([:a, :b].map(&:to_s)))
+         PEModel.protected_attributes(:default_create).should eq(ActiveModel::MassAssignmentSecurity::BlackList.new([:a, :b].map(&:to_s)))
        end
 
-       it "appends attr_protected with custom role to event" do
+       it "appends attr_protected with custom role to action" do
          class PFModel < AlfredModel
            alfred_protected :a, :b, as: :custom, on: :create
          end
-         PFModel.protected_attributes.should eq(ActiveModel::MassAssignmentSecurity::BlackList.new([].map(&:to_s)))
-         PFModel.before_create
-         PFModel.protected_attributes.should eq(ActiveModel::MassAssignmentSecurity::BlackList.new([].map(&:to_s)))
-         PFModel.protected_attributes(:custom).should eq(ActiveModel::MassAssignmentSecurity::BlackList.new([:a, :b].map(&:to_s)))
+         PFModel.protected_attributes(:custom_create).should eq(ActiveModel::MassAssignmentSecurity::BlackList.new([:a, :b].map(&:to_s)))
        end
      end
 

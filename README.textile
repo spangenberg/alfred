@@ -1,9 +1,6 @@
 h1. Alfred - the unobtrusive butler who takes care of the uninvited guests "!https://secure.travis-ci.org/parcydo/alfred.png?branch=master!":http://travis-ci.org/parcydo/alfred
 
-Travis is an attempt to create an open-source, distributed build system for the Ruby community that:
-
-1. allows open-source projects to register their repository and have their test-suites run on demand
-2. allows users to contribute build capacities by connecting a VM that runs a build agent somewhere on their underused servers
+Alfred provides better attr_accessor handling on your application.
 
 h2. Contact
 * "Github":http://github.com/parcydo

@@ -113,27 +113,28 @@ module Alfred
         end
 
         private
+        def role(as = nil, action = nil)
+        	role = (as || :default).to_s
+          role << "_#{action}" if action
+          role.to_sym
+        end
+
         def alfred(method, *args)
           options = args.extract_options!
 
           if args.include?(:password) && Alfred.auto_password_confirmation
-            args = args + [:password_confirmation]
+            args = [:password_confirmation] + args
           end
 
           [nil, :create, :update].each do |action|
-            if options[:on]
-              next unless options[:on] == action
-            end
+            next if !options[:on] && options[:on] != action
 
             action_args = args.dup
+            role = role(options[:as], action)
 
-            role = (options[:as] || :default).to_s
-            role << "_#{action}" if action
-            role = role.to_sym
-
+            action_args = send("#{method}_attributes", role(:default, action)).to_a.compact.reject { |s| s.blank? } + action_args
+            action_args = send("#{method}_attributes", role(options[:inherit], action)).to_a.compact.reject { |s| s.blank? } + action_args if options[:inherit]
             action_args = action_args + [{ as: role }]
-
-            action_args = action_args + send("#{method}_attributes", role).to_a.compact.reject { |s| s.blank? }
 
             send("attr_#{method}", *action_args)
           end
