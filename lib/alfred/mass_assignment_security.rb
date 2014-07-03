@@ -114,7 +114,7 @@ module Alfred
 
         private
         def role(as = nil, action = nil)
-        	role = (as || :default).to_s
+          role = (as || :default).to_s
           role << "_#{action}" if action
           role.to_sym
         end
